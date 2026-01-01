@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Darija Translator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #c1272d;
+            --primary-dark: #961b20;
+            --secondary: #006233;
+            --accent: #fcd116;
+            --bg-gradient: linear-gradient(135deg, #fceceb 0%, #e6f4ea 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1f2937;
+            --text-sub: #6b7280;
+            --border: #f3f4f6;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.02);
+            --shadow-lg: 0 15px 30px -5px rgba(193, 39, 45, 0.15);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 380px;
+            font-family: 'Outfit', sans-serif;
+            background: #f9fafb;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* Zellige Pattern */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M20 0l20 20-20 20L0 20z" fill="%23006233" fill-opacity="0.05"/%3E%3C/svg%3E');
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            padding: 24px;
+            background: var(--bg-gradient);
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-circle {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), #a01a20);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(193, 39, 45, 0.3);
+            border: 2px solid white;
+            position: relative;
+        }
+
+        .logo-circle::after {
+            content: "★";
+            position: absolute;
+            color: var(--secondary);
+            font-size: 8px;
+            top: 2px;
+            right: 2px;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .badge {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 8px;
+            background: linear-gradient(90deg, rgba(193, 39, 45, 0.1), rgba(0, 98, 51, 0.1));
+            color: var(--text-main);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .input-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 4px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            margin-bottom: 16px;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .input-card:focus-within {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 30px -5px rgba(0, 98, 51, 0.2);
+            border-color: var(--secondary);
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px 8px;
+        }
+
+        .field-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 0 16px 16px;
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 1.5;
+            color: var(--text-main);
+            resize: none;
+            min-height: 80px;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        .output-card {
+            background: rgba(240, 253, 244, 0.8);
+            border: 1px solid rgba(0, 98, 51, 0.1);
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 0 12px 12px;
+        }
+
+        button.icon-btn {
+            background: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        button.icon-btn:hover {
+            color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        button.primary-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, #a01a20 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(193, 39, 45, 0.4);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button.primary-btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        button.primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(193, 39, 45, 0.5);
+        }
+
+        button.primary-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Status & History */
+        #status {
+            text-align: center;
+            font-size: 12px;
+            height: 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.05);
+            margin: 0 -24px 16px;
+        }
+
+        .history-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .history-list {
+            max-height: 120px;
+            overflow-y: auto;
+            margin: 0 -4px;
+            padding: 0 4px;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: #e5e7eb;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="brand">
+                <div class="logo-circle">D</div>
+                <span class="title">Darija Translator</span>
+            </div>
+            <div id="user-section" style="display: none;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div id="user-avatar"
+                        style="width: 28px; height: 28px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 12px;">
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span id="user-email" style="font-size: 11px; font-weight: 600; color: #374151;"></span>
+                        <button id="logout-btn"
+                            style="background: none; border: none; color: #9ca3af; font-size: 10px; cursor: pointer; padding: 0; text-align: left; text-decoration: underline;">Déconnexion</button>
+                    </div>
+                </div>
+            </div>
+            <span class="badge" id="africa-badge">⚽ CAN 2025</span>
+        </div>
+
+        <div class="input-card">
+            <div class="label-row">
+                <span class="field-label">Texte Source (Anglais)</span>
+                <button id="micBtn" class="icon-btn" title="Dicter">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <textarea id="original" placeholder="Saisir ou coller votre texte anglais ici..."></textarea>
+        </div>
+
+        <div class="input-card output-card">
+            <div class="label-row">
+                <span class="field-label" style="color: var(--secondary);">Traduction Darija</span>
+            </div>
+            <textarea id="translated" readonly placeholder="La traduction apparaîtra ici..."></textarea>
+            <div class="result-actions">
+                <button id="speakBtn" class="icon-btn" title="Écouter">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z">
+                        </path>
+                    </svg>
+                </button>
+                <button id="copyBtn" class="icon-btn" title="Copier">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <button id="translateBtn" class="primary-btn">
+            <span>TRADUIRE MAINTENANT</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+        </button>
+
+        <div id="status"></div>
+
+        <div class="divider"></div>
+
+        <div>
+            <div class="history-title">Récemment</div>
+            <div id="historyList" class="history-list">
+                <!-- Items injectés par JS -->
+            </div>
+        </div>
+
+        <button id="clearHistory"
+            style="width:100%; margin-top:12px; background:none; border:none; color:#9ca3af; font-size:11px; cursor:pointer; text-decoration: underline;">Effacer
+            l'historique</button>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>
