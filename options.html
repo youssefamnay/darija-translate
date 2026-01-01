@@ -1,62 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <title>Paramètres - Darija Translator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #C1272D;
+            --primary-dark: #9B1F24;
+            --secondary: #006233;
+            --gold: #D4AF37;
+            --bg-dark: #0A0A0F;
+            --bg-gradient: linear-gradient(135deg, #0D0D12 0%, #1A1A25 100%);
+            --card-bg: rgba(20, 20, 30, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.4);
+        }
+
         body {
-            padding: 20px;
-            font-family: system-ui, sans-serif;
-            min-width: 300px;
-            color: #1f2937;
+            margin: 0;
+            padding: 40px;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-width: 400px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(193, 39, 45, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 98, 51, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         h1 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #111827;
+            font-size: 24px;
+            margin-bottom: 32px;
+            background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .container {
+            background: rgba(13, 13, 18, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
         }
 
         .option {
-            margin-bottom: 15px;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        label {
-            cursor: pointer;
-            font-size: 14px;
+        .option:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
-        button {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
+        .option-label {
+            font-size: 15px;
             font-weight: 500;
+            color: var(--text-primary);
         }
 
-        button:hover {
-            background: #1d4ed8;
-        }
-
-        #status {
-            margin-top: 10px;
-            color: #059669;
-            font-size: 13px;
-            min-height: 20px;
+        .option-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
         }
 
         /* Switch CSS */
         .switch {
             position: relative;
             display: inline-block;
-            width: 40px;
-            height: 20px;
+            width: 48px;
+            height: 26px;
         }
 
         .switch input {
@@ -72,7 +111,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: rgba(255, 255, 255, 0.1);
             transition: .4s;
             border-radius: 34px;
         }
@@ -80,21 +119,59 @@
         .slider:before {
             position: absolute;
             content: "";
-            height: 16px;
-            width: 16px;
-            left: 2px;
-            bottom: 2px;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
             background-color: white;
             transition: .4s;
             border-radius: 50%;
         }
 
         input:checked+.slider {
-            background-color: #2563eb;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
         }
 
         input:checked+.slider:before {
-            transform: translateX(20px);
+            transform: translateX(22px);
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        #save {
+            background: linear-gradient(135deg, var(--secondary), #004D28);
+            border: none;
+            width: 100%;
+            margin-top: 24px;
+            padding: 16px;
+            font-size: 16px;
+        }
+
+        #save:hover {
+            box-shadow: 0 8px 16px rgba(0, 98, 51, 0.3);
+        }
+
+        #status {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 13px;
+            min-height: 20px;
+            color: var(--gold);
         }
     </style>
 </head>
@@ -102,23 +179,28 @@
 <body>
     <h1>Paramètres Darija Translator</h1>
 
-    <div class="option">
-        <label for="floatingIcon">Afficher l'icône flottante à la sélection</label>
-        <label class="switch">
-            <input type="checkbox" id="floatingIcon">
-            <span class="slider"></span>
-        </label>
-    </div>
-
-    <div class="option" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
-        <div>
-            <div style="font-weight: 500; margin-bottom: 4px;">Accès au microphone</div>
-            <div style="font-size: 12px; color: #666;">Nécessaire pour la dictée vocale.</div>
+    <div class="container">
+        <div class="option">
+            <div>
+                <div class="option-label">Icône flottante</div>
+                <div class="option-desc">Afficher l'icône de traduction lors de la sélection de texte</div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="floatingIcon">
+                <span class="slider"></span>
+            </label>
         </div>
-        <button id="requestMic" style="background:#4b5563;">Vérifier / Autoriser</button>
+
+        <div class="option">
+            <div>
+                <div class="option-label">Accès au microphone</div>
+                <div class="option-desc">Autoriser l'extension à utiliser votre microphone pour la dictée</div>
+            </div>
+            <button id="requestMic">Vérifier</button>
+        </div>
     </div>
 
-    <button id="save">Enregistrer</button>
+    <button id="save">Enregistrer les préférences</button>
     <div id="status"></div>
 
     <script src="options.js"></script>

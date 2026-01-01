@@ -4,7 +4,7 @@ const path = require('path');
 
 const PORT = 8000;
 const API_HOST = 'localhost';
-const API_PORT = 8080;
+const API_PORT = 3000;
 
 const server = http.createServer((req, res) => {
     // API Proxy
@@ -12,7 +12,7 @@ const server = http.createServer((req, res) => {
         const options = {
             hostname: API_HOST,
             port: API_PORT,
-            path: req.url,
+            path: req.url.replace('/darija-translator-service', ''),
             method: req.method,
             headers: req.headers
         };
@@ -32,9 +32,9 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // Static File Serving
-    let filePath = '.' + req.url;
-    if (filePath === './' || filePath.endsWith('/')) filePath += 'index.html';
+    // Static File Serving - resolve from website directory
+    let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url);
+    if (filePath.endsWith('/')) filePath = path.join(filePath, 'index.html');
 
     const extname = path.extname(filePath);
     let contentType = 'text/html';
